@@ -92,7 +92,20 @@ public class MyContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+        AppDatabase db = AppDatabase.getDatabaseInstance(getContext());
+        Cursor cursor = null;
+        UserDao dao = db.userDao();
+        User user = new User();
+
+        switch (uriMatcher.match(uri)) {
+            case 1:
+                user.firstName = contentValues.getAsString(ContractUser.COLUMN_FIRSTNAME);
+                user.lastName = contentValues.getAsString(ContractUser.COLUMN_LASTNAME);
+                long newId = dao.insert(user);
+                return Uri.withAppendedPath(uri, String.valueOf(newId));
+        }
+
+        return Uri.withAppendedPath(uri, String.valueOf(-1));
     }
 
     @Override
@@ -102,6 +115,14 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+        int id = Integer.parseInt(uri.getLastPathSegment());
+        AppDatabase db = AppDatabase.getDatabaseInstance(getContext());
+        Cursor cursor = null;
+        UserDao dao = db.userDao();
+        List<User> usersToUpdate = dao.loadAllByIds(new int[]{id});
+        usersToUpdate.get(0).firstName = contentValues.getAsString(ContractUser.COLUMN_FIRSTNAME);
+        usersToUpdate.get(0).lastName = contentValues.getAsString(ContractUser.COLUMN_LASTNAME);
+
+        return dao.updateUser(usersToUpdate.get(0));
     }
 }

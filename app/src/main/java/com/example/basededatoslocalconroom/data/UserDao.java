@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public interface UserDao {
 
     @Query("SELECT * FROM user")
-    List<User> getAll();
+    public List<User> getAll();
 
     @Query("SELECT * FROM user WHERE uid IN (:userIds)")
     List<User> loadAllByIds(int[] userIds);
@@ -22,7 +23,16 @@ public interface UserDao {
     @Insert
     void insertAll(User... users);
 
+    @Insert
+    void insert(User user);
+
     @Delete
     void delete(User user);
+
+    @Update
+    int updateUser(User user);
+
+    @Delete
+    int deleteUser(User user);
 
 }

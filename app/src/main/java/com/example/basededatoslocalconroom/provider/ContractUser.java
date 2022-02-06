@@ -4,7 +4,7 @@ import android.net.Uri;
 
 public class ContractUser {
     public static final Uri CONTENT_URI = Uri.parse("content://com.example.basededatoslocalconroom.provider/user");
-    public static final String[] NAMES_COLUMNS = new String[]{
+    public static final String[] COLUMNS_NAMES = new String[]{
             "uid",
             "first_name",
             "last_name"

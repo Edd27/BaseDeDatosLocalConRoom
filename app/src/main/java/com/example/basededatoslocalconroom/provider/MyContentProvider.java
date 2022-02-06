@@ -38,7 +38,7 @@ public class MyContentProvider extends ContentProvider {
         MatrixCursor matrixCursor = new MatrixCursor(new String[]{
                 "uid",
                 "first_name",
-                "lastname"
+                "last_name"
         });
 
         for (User user : users) {
@@ -110,7 +110,13 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+        int id = Integer.parseInt(uri.getLastPathSegment());
+        AppDatabase db = AppDatabase.getDatabaseInstance(getContext());
+        Cursor cursor = null;
+        UserDao dao = db.userDao();
+        List<User> usersToDelete = dao.loadAllByIds(new int[]{id});
+
+        return dao.deleteUser(usersToDelete.get(0));
     }
 
     @Override

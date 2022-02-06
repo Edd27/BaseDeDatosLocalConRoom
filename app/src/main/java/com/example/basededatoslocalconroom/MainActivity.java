@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.basededatoslocalconroom.data.AppDatabase;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     AppDatabase db;
     Button btnInsert, btnRead;
+    EditText txtFirstName, txtLastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +34,30 @@ public class MainActivity extends AppCompatActivity {
             AppDatabase db = AppDatabase.getDatabaseInstance(getApplication());
             UserDao dao = db.userDao();
 
-            AppDatabase.databaseWriteExecutor.execute(() -> {
-                User user = new User();
-                user.firstName = "Juan";
-                user.lastName = "Lopez";
-                dao.insertAll(user);
-            });
+            txtFirstName = (EditText) findViewById(R.id.txtFirstName);
+            txtLastName = (EditText) findViewById(R.id.txtLastName);
 
-            Toast.makeText(this, "Insertado", Toast.LENGTH_LONG).show();
+            if (txtFirstName.getText().toString().length() > 0 && txtLastName.getText().toString().length() > 0) {
+                AppDatabase.databaseWriteExecutor.execute(() -> {
+                    User user = new User();
+                    user.firstName = txtFirstName.getText().toString();
+                    user.lastName = txtLastName.getText().toString();
+                    dao.insertAll(user);
+                });
+
+                Toast.makeText(this, "Insertado", Toast.LENGTH_LONG).show();
+                txtFirstName.setText(null);
+                txtLastName.setText(null);
+            } else {
+                if (txtFirstName.getText().toString().length() < 1) {
+                    Toast.makeText(this, "Ingresa el nombre", Toast.LENGTH_SHORT).show();
+                }
+                if (txtLastName.getText().toString().length() < 1) {
+                    Toast.makeText(this, "Ingresa el apellido", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
         });
 
         btnRead.setOnClickListener(view -> {

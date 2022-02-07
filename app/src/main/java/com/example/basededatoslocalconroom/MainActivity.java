@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.app.Application;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 import com.example.basededatoslocalconroom.data.AppDatabase;
 import com.example.basededatoslocalconroom.data.User;
 import com.example.basededatoslocalconroom.data.UserDao;
+import com.example.basededatoslocalconroom.provider.ContractUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,6 +83,17 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        //Test GET BY ID
+        getUser("Edgar Benavides");
+
     }
 
+    private void getUser(String value) {
+        Cursor cursor = getContentResolver().query(Uri.withAppendedPath(ContractUser.CONTENT_URI, value), ContractUser.COLUMNS_NAMES, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                Log.d("USER", cursor.getInt(0) + " - " + cursor.getString(1));
+            }
+        }
+    }
 }

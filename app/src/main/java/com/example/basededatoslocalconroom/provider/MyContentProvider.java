@@ -1,6 +1,7 @@
 package com.example.basededatoslocalconroom.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import com.example.basededatoslocalconroom.data.AppDatabase;
 import com.example.basededatoslocalconroom.data.User;
 import com.example.basededatoslocalconroom.data.UserDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyContentProvider extends ContentProvider {
@@ -63,6 +65,15 @@ public class MyContentProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case 1:
                 cursor = toCursor(dao.getAll());
+                break;
+            case 2:
+                int userId = (int)ContentUris.parseId(uri);
+                List<User> user = dao.loadAllByIds(new int[]{userId});
+                cursor = toCursor(user);
+                break;
+            case 3:
+                String name = uri.getLastPathSegment();
+                cursor = toCursor(dao.getUsersByName(name));
                 break;
         }
 

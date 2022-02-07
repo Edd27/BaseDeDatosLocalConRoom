@@ -20,7 +20,7 @@ public interface UserDao {
     @Query("SELECT * FROM user WHERE first_name LIKE :first AND last_name LIKE :last LIMIT 1")
     User findByName(String first, String last);
 
-    @Query("SELECT * FROM user WHERE (first_name LIKE '%' || :name || '%') OR (last_name LIKE '%' || :name || '%') OR (first_name || ' ' || last_name LIKE '%' || :name || '%') LIMIT 1")
+    @Query("SELECT * FROM user WHERE (first_name LIKE '%' || :name || '%') OR (last_name LIKE '%' || :name || '%') OR (first_name || ' ' || last_name LIKE '%' || :name || '%')")
     public List<User> getUsersByName(String name);
 
     @Insert

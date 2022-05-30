@@ -72,14 +72,12 @@ public class MainActivity extends AppCompatActivity {
                 AppDatabase.databaseWriteExecutor.execute(() -> {
                     dao.getAll().stream().forEach(user -> {
                         Log.i("Consulta de usuarios", user.uid + " " + user.firstName + " " + user.lastName);
-                        Toast.makeText(this, user.uid + " " + user.firstName + " " + user.lastName, Toast.LENGTH_LONG).show();
                     });
                 });
             } else {
                 AppDatabase.databaseWriteExecutor.execute(() -> {
                     for (User user : dao.getAll()) {
                         Log.d("Consulta de usuarios", user.firstName + " " + user.lastName);
-                        Toast.makeText(this, user.uid + " " + user.firstName + " " + user.lastName, Toast.LENGTH_LONG).show();
                     }
                 });
             }
